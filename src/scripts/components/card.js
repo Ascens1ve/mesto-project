@@ -1,31 +1,45 @@
-function createCard(image, imageName, cardTemplateInner, name, link) {
+import { deleteCard, putLike, deleteLike } from './api.js';
+
+function createCard(cardTemplateInner, name, link, id, del) {
     const cardElement = cardTemplateInner.cloneNode(true);
     cardElement.querySelector('.card__title').textContent = name;
     cardElement.querySelector('.card__image').src = link;
-
-    //cardElement.querySelector('.card__like-button').addEventListener('click', (event) => {
-    //        event.target.classList.toggle('card__like-button_is-active');
-    //});
-
-    //cardElement.querySelector('.card__delete-button').addEventListener('click', (event) => {
-    //    event.target.closest('.places__item').remove();
-    //});
-
-    //cardElement.querySelector('.card__image').addEventListener('click', () => {
-    //    image.src = link;
-    //    imageName.textContent = name;
-    //    openModal(imagePopup) 
-    //});
-
+    cardElement.id = id;
+    if (del) cardElement.querySelector('.card__delete-button').style.display = "none";
     return cardElement;
 }
 
 const handlerCardDeleteLike = event => {
     if (event.target.classList.contains('card__like-button')) {
-        event.target.classList.toggle('card__like-button_is-active');
+        if (event.target.classList.contains('card__like-button_is-active')) {
+            deleteLike(event.target.closest('.places__item').id)
+                .then(data => {
+                    event.target.parentElement.querySelector('.card__likes-count').textContent = data.likes.length;
+                    event.target.classList.remove('card__like-button_is-active');
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        } else {
+            putLike(event.target.closest('.places__item').id)
+                .then(data => {
+                    event.target.parentElement.querySelector('.card__likes-count').textContent = data.likes.length;
+                    event.target.classList.add('card__like-button_is-active');
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
     else if (event.target.classList.contains('card__delete-button')) {
-        event.target.closest('.places__item').remove();
+        console.log(event.target.closest('.places__item').id);
+        deleteCard(event.target.closest('.places__item').id)
+            .then(() => {
+                event.target.closest('.places__item').remove();
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 

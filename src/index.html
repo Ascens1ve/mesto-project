@@ -14,7 +14,11 @@
   </header>
   <main class="content">
     <section class="profile page__section">
-      <div class="profile__image"></div>
+      <div class="profile__image">
+        <div class="profile__image-overlay">
+          <img src="./images/Vector.svg" alt="Иконка редактирования аватара" class="profile__edit-avatar">
+        </div>
+      </div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
         <button class="profile__edit-button" type="button"></button>
@@ -32,7 +36,7 @@
       © 2021 Mesto Russia
     </p>
   </footer>
-  <div class="popup popup_type_edit">
+  <div class="popup popup_type_edit popup_is-animated">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
@@ -45,7 +49,18 @@
       </form>
     </div>
   </div>
-  <div class="popup popup_type_new-card">
+  <div class="popup popup_type_new-avatar popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form" name="new-avatar" novalidate>
+        <input type="url" name="avatar" id="avatar-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
+        <span class="popup__input-error avatar-input-error"></span>
+        <button type="submit" class="button popup__button">Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_new-card popup_is-animated">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
@@ -54,11 +69,11 @@
         <span class="popup__input-error place-name-input-error"></span>
         <input type="url" name="link" id="link-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
         <span class="popup__input-error link-input-error"></span>
-        <button type="submit" class="button popup__button">Сохранить</button>
+        <button type="submit" class="button popup__button">Создать</button>
       </form>
     </div>
   </div>
-  <div class="popup popup_type_image">
+  <div class="popup popup_type_image popup_is-animated">
     <div class="popup__content popup__content_content_image">
       <button type="button" class="popup__close"></button>
       <img src="" alt="" class="popup__image">
@@ -71,9 +86,11 @@
     <img class="card__image" src="" alt="" />
     <button type="button" class="card__delete-button"></button>
     <div class="card__description">
-      <h2 class="card__title">
-      </h2>
-      <button type="button" class="card__like-button"></button>
+      <h2 class="card__title"></h2>
+      <div class="card__likes">
+        <button type="button" class="card__like-button"></button>
+        <span class="card__likes-count">0</span>
+      </div>
     </div>
   </li>
 </template>
