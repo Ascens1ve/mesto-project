@@ -1,7 +1,7 @@
-import { enableValidation, toggleButtonState, checkInputValidity } from './components/validate.js';
-import { createCard, handlerCardDeleteLike } from './components/card.js';
-import { openModal, closeModal } from './components/modal.js';
-import { getProfileInfo, updateProfileInfo, getInitialCards, postCard, updateAvatar } from './components/api.js';
+import { enableValidation, toggleButtonState, checkInputValidity } from './validate.js';
+import { createCard, handlerCardDeleteLike } from './card.js';
+import { openModal, closeModal } from './modal.js';
+import { getProfileInfo, updateProfileInfo, getInitialCards, postCard, updateAvatar } from './api.js';
 import * as css from '../pages/index.css';
 
 const popups = {
