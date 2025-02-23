@@ -29,7 +29,6 @@ const hideInputError = (formElement, inputElement, settings) => {
 }
 
 const checkInputValidity = (formElement, inputElement, settings) => {
-    console.log(inputElement.validity);
     if (!inputElement.validity.valid) {
         showInputError(formElement, inputElement, inputElement.validationMessage, settings);
     } else {
@@ -52,9 +51,6 @@ const setEventListeners = (formElement, settings) => {
 const enableValidation = (settings) => {
     const formList = Array.from(document.querySelectorAll(settings.formSelector));
     formList.forEach((formElement) => {
-        //formElement.addEventListener('submit', (event) => {
-        //    event.preventDefault();
-        //});
         setEventListeners(formElement, settings);
     });
 }
