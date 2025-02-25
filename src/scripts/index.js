@@ -30,9 +30,22 @@ profileInfo.avatar.addEventListener('click', () => {
     openModal(popups.avatarPopup, popupOpenCallback);
 });
 
+const toggleDisabledInputElements = (inputList) => {
+    inputList.forEach((inputElement) => {
+        inputElement.readOnly = !inputElement.readOnly;
+        console.log(inputElement);
+    });
+};
+
+const getPopupInputElements = (popup) => {
+    return Array.from(popup.querySelectorAll('.popup__input'));
+}
+
 popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (event) => {
     event.preventDefault();
     const buttonElement = popups.avatarPopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.avatarPopup);
+    toggleDisabledInputElements(inputList);
     buttonElement.textContent = 'Сохранение...';
     buttonElement.setAttribute('disabled', '');
     updateAvatar(event.currentTarget.querySelector('.popup__input').value)
@@ -44,6 +57,7 @@ popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (eve
             console.log(err);
         })
         .finally(() => {
+            toggleDisabledInputElements(inputList);
             buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Сохранить';
         });
@@ -78,6 +92,8 @@ profileEditOpenButton.addEventListener('click', () => {
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.profilePopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.profilePopup);
+    toggleDisabledInputElements(inputList);
     buttonElement.textContent = 'Сохранение...';
     buttonElement.setAttribute('disabled', '');
     updateProfileInfo(nameInput.value, jobInput.value)
@@ -90,6 +106,7 @@ function handleProfileFormSubmit(evt) {
             console.log(err);
         })
         .finally(() => {
+            toggleDisabledInputElements(inputList);
             buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Сохранить';
         });
@@ -112,6 +129,8 @@ cardAddOpenButton.addEventListener('click', () => {
 function handleCardFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.cardPopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.cardPopup);
+    toggleDisabledInputElements(inputList);
     buttonElement.setAttribute('disabled', '');
     buttonElement.textContent = 'Создание...';
     postCard(cardNameInput.value, cardUrlInput.value)
@@ -123,6 +142,7 @@ function handleCardFormSubmit(evt) {
             console.log(err);
         })
         .finally(() => {
+            toggleDisabledInputElements(inputList);
             buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Создать';
         });
