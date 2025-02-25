@@ -55,4 +55,4 @@ const enableValidation = (settings) => {
     });
 }
 
-export { enableValidation, toggleButtonState, checkInputValidity };
+export { enableValidation, toggleButtonState, checkInputValidity, hideInputError };

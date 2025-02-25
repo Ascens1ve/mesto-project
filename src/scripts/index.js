@@ -1,6 +1,6 @@
-import { enableValidation, toggleButtonState, checkInputValidity } from './components/validate.js';
+import { enableValidation } from './components/validate.js';
 import { createCard, handlerCardDeleteLike } from './components/card.js';
-import { openModal, closeModal } from './components/modal.js';
+import { openModal, closeModal, validationSettings, popupOpenCallback, popupCloseCallback } from './components/modal.js';
 import { getProfileInfo, updateProfileInfo, getInitialCards, postCard, updateAvatar } from './components/api.js';
 import * as css from '../pages/index.css';
 
@@ -14,7 +14,7 @@ const popups = {
 // Закрытие по кнопке
 Object.values(popups).forEach((popup) => {
     popup.querySelector('.popup__close').addEventListener('click', () => {
-        closeModal(popup);
+        closeModal(popup, popupCloseCallback);
     })
 })
 
@@ -26,22 +26,26 @@ const profileInfo = {
 };
 
 profileInfo.avatar.addEventListener('click', () => {
+    popups.avatarPopup.querySelector('.popup__input').value = '';
     openModal(popups.avatarPopup, popupOpenCallback);
 });
 
 popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (event) => {
     event.preventDefault();
-    popups.avatarPopup.querySelector('.popup__button').textContent = 'Сохранение...';
+    const buttonElement = popups.avatarPopup.querySelector('.popup__button');
+    buttonElement.textContent = 'Сохранение...';
+    buttonElement.setAttribute('disabled', '');
     updateAvatar(event.currentTarget.querySelector('.popup__input').value)
         .then(data => {
             profileInfo.avatar.style.backgroundImage = `url('${data.avatar}')`;
-            closeModal(popups.avatarPopup);
+            closeModal(popups.avatarPopup, popupCloseCallback);
         })
         .catch(err => {
             console.log(err);
         })
         .finally(() => {
-            popups.avatarPopup.querySelector('.popup__button').textContent = 'Сохранить';
+            buttonElement.removeAttribute('disabled');
+            buttonElement.textContent = 'Сохранить';
         });
 })
 
@@ -55,16 +59,6 @@ getProfileInfo()
     .catch(err => {
         console.log(err);
     })
-
-
-const popupOpenCallback = (popup) => {
-    const inputList = Array.from(popup.querySelectorAll(validationSettings.inputSelector));
-    const buttonElement = popup.querySelector(validationSettings.submitButtonSelector);
-    inputList.forEach((inputElement) => {
-        checkInputValidity(popup, inputElement, validationSettings);
-    });
-    toggleButtonState(inputList, buttonElement, validationSettings);
-}
 
 // Кнопки открытия и закрытия поп-апа
 const profileEditOpenButton = document.querySelector('.profile__edit-button');
@@ -83,19 +77,21 @@ profileEditOpenButton.addEventListener('click', () => {
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
-
-    popups.profilePopup.querySelector('.popup__button').textContent = 'Сохранение...';
+    const buttonElement = popups.profilePopup.querySelector('.popup__button');
+    buttonElement.textContent = 'Сохранение...';
+    buttonElement.setAttribute('disabled', '');
     updateProfileInfo(nameInput.value, jobInput.value)
         .then(res => {
             profileInfo.title.textContent = res.name;
             profileInfo.description.textContent = res.about;
-            closeModal(popups.profilePopup);
+            closeModal(popups.profilePopup, popupCloseCallback);
         })
         .catch(err => {
             console.log(err);
         })
         .finally(() => {
-            popups.profilePopup.querySelector('.popup__button').textContent = 'Сохранить';
+            buttonElement.removeAttribute('disabled');
+            buttonElement.textContent = 'Сохранить';
         });
 }
 
@@ -115,17 +111,20 @@ cardAddOpenButton.addEventListener('click', () => {
 
 function handleCardFormSubmit(evt) {
     evt.preventDefault();
-    popups.cardPopup.querySelector('.popup__button').textContent = 'Создание...';
+    const buttonElement = popups.cardPopup.querySelector('.popup__button');
+    buttonElement.setAttribute('disabled', '');
+    buttonElement.textContent = 'Создание...';
     postCard(cardNameInput.value, cardUrlInput.value)
         .then(res => {
             cards.prepend(createCard(cardTemplateInner, res.name, res.link, res._id));
-            closeModal(popups.cardPopup);
+            closeModal(popups.cardPopup, popupCloseCallback);
         })
         .catch(err => {
             console.log(err);
         })
         .finally(() => {
-            popups.cardPopup.querySelector('.popup__button').textContent = 'Создать';
+            buttonElement.removeAttribute('disabled');
+            buttonElement.textContent = 'Создать';
         });
 }
 
@@ -163,14 +162,5 @@ getInitialCards()
     .catch(err => {
         console.log(err);
     })
-
-const validationSettings = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-};
 
 enableValidation(validationSettings);
