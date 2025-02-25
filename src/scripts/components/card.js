@@ -32,7 +32,6 @@ const handlerCardDeleteLike = event => {
         }
     }
     else if (event.target.classList.contains('card__delete-button')) {
-        console.log(event.target.closest('.places__item').id);
         deleteCard(event.target.closest('.places__item').id)
             .then(() => {
                 event.target.closest('.places__item').remove();

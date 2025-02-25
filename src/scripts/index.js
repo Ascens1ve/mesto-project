@@ -33,7 +33,6 @@ profileInfo.avatar.addEventListener('click', () => {
 const toggleDisabledInputElements = (inputList) => {
     inputList.forEach((inputElement) => {
         inputElement.readOnly = !inputElement.readOnly;
-        console.log(inputElement);
     });
 };
 
