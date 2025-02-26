@@ -42,9 +42,17 @@ const setEventListeners = (formElement, settings) => {
     toggleButtonState(inputList, buttonElement, settings);
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {
-            checkInputValidity(formElement, inputElement, settings);
-            toggleButtonState(inputList, buttonElement, settings);
+            if (formElement.dataset.isSubmitting !== 'true') {
+                checkInputValidity(formElement, inputElement, settings);
+                toggleButtonState(inputList, buttonElement, settings);
+            }
         })
+    });
+
+    formElement.addEventListener('submit', () => {
+        formElement.dataset.isSubmitting = 'true';
+        buttonElement.classList.add(settings.inactiveButtonClass);
+        buttonElement.setAttribute('disabled', '');
     });
 };
 

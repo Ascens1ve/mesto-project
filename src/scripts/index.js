@@ -1,4 +1,4 @@
-import { enableValidation } from './components/validate.js';
+import { enableValidation, toggleButtonState } from './components/validate.js';
 import { createCard, handlerCardDeleteLike } from './components/card.js';
 import { openModal, closeModal, validationSettings, popupOpenCallback, popupCloseCallback } from './components/modal.js';
 import { getProfileInfo, updateProfileInfo, getInitialCards, postCard, updateAvatar } from './components/api.js';
@@ -30,12 +30,6 @@ profileInfo.avatar.addEventListener('click', () => {
     openModal(popups.avatarPopup, popupOpenCallback);
 });
 
-const toggleDisabledInputElements = (inputList) => {
-    inputList.forEach((inputElement) => {
-        inputElement.readOnly = !inputElement.readOnly;
-    });
-};
-
 const getPopupInputElements = (popup) => {
     return Array.from(popup.querySelectorAll('.popup__input'));
 }
@@ -43,10 +37,7 @@ const getPopupInputElements = (popup) => {
 popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (event) => {
     event.preventDefault();
     const buttonElement = popups.avatarPopup.querySelector('.popup__button');
-    const inputList = getPopupInputElements(popups.avatarPopup);
-    toggleDisabledInputElements(inputList);
     buttonElement.textContent = 'Сохранение...';
-    buttonElement.setAttribute('disabled', '');
     updateAvatar(event.currentTarget.querySelector('.popup__input').value)
         .then(data => {
             profileInfo.avatar.style.backgroundImage = `url('${data.avatar}')`;
@@ -56,9 +47,8 @@ popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (eve
             console.log(err);
         })
         .finally(() => {
-            toggleDisabledInputElements(inputList);
-            buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Сохранить';
+            toggleButtonState(getPopupInputElements(popups.avatarPopup), buttonElement, validationSettings);
         });
 })
 
@@ -91,10 +81,7 @@ profileEditOpenButton.addEventListener('click', () => {
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.profilePopup.querySelector('.popup__button');
-    const inputList = getPopupInputElements(popups.profilePopup);
-    toggleDisabledInputElements(inputList);
     buttonElement.textContent = 'Сохранение...';
-    buttonElement.setAttribute('disabled', '');
     updateProfileInfo(nameInput.value, jobInput.value)
         .then(res => {
             profileInfo.title.textContent = res.name;
@@ -105,9 +92,8 @@ function handleProfileFormSubmit(evt) {
             console.log(err);
         })
         .finally(() => {
-            toggleDisabledInputElements(inputList);
-            buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Сохранить';
+            toggleButtonState(getPopupInputElements(popups.profilePopup), buttonElement, validationSettings);
         });
 }
 
@@ -128,9 +114,6 @@ cardAddOpenButton.addEventListener('click', () => {
 function handleCardFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.cardPopup.querySelector('.popup__button');
-    const inputList = getPopupInputElements(popups.cardPopup);
-    toggleDisabledInputElements(inputList);
-    buttonElement.setAttribute('disabled', '');
     buttonElement.textContent = 'Создание...';
     postCard(cardNameInput.value, cardUrlInput.value)
         .then(res => {
@@ -141,9 +124,8 @@ function handleCardFormSubmit(evt) {
             console.log(err);
         })
         .finally(() => {
-            toggleDisabledInputElements(inputList);
-            buttonElement.removeAttribute('disabled');
             buttonElement.textContent = 'Создать';
+            toggleButtonState(getPopupInputElements(popups.cardPopup), buttonElement, validationSettings);
         });
 }
 

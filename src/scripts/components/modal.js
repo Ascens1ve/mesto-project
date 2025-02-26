@@ -52,6 +52,7 @@ export function closeModal(popup, onCloseCallback) {
     if (typeof onCloseCallback === 'function') {
         onCloseCallback(popup);
     }
+    popup.dataset.isSubmitting = 'false';
     document.removeEventListener('keydown', closeByEsc);
     document.removeEventListener('click', closeByClick);
 }
