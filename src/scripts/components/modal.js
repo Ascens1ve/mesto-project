@@ -22,17 +22,31 @@ export const popupCloseCallback = (popup) => {
             hideInputError(popup, inputElement, validationSettings);
         }
     });
+    popup.addEventListener('transitionend', function handler() {
+        popup.querySelector('.popup__form').dataset.isSubmitting = 'false';
+        popupOpenCallback(popup);
+        popup.removeEventListener('transitionend', handler);
+    });
 }
 
 function closeByEsc(event) {
     if (event.key === 'Escape') {
-        closeModal(document.querySelector('.popup_is-opened'), popupCloseCallback);
+        let popup = document.querySelector('.popup_is-opened');
+        if (!popup.classList.contains('popup_type_image')) {
+            closeModal(popup, popupCloseCallback);
+        } else {
+            closeModal(popup);
+        }
     }
 }
 
 function closeByClick(event) {
     if (event.target.classList.contains('popup')) {
-        closeModal(event.target, popupCloseCallback);
+        if (!event.target.classList.contains('popup_type_image')) {
+            closeModal(event.target, popupCloseCallback);
+        } else {
+            closeModal(event.target);
+        }
     }
 }
 
@@ -52,7 +66,6 @@ export function closeModal(popup, onCloseCallback) {
     if (typeof onCloseCallback === 'function') {
         onCloseCallback(popup);
     }
-    popup.querySelector('.popup__form').dataset.isSubmitting = 'false';
     document.removeEventListener('keydown', closeByEsc);
     document.removeEventListener('click', closeByClick);
 }

@@ -14,7 +14,11 @@ const popups = {
 // Закрытие по кнопке
 Object.values(popups).forEach((popup) => {
     popup.querySelector('.popup__close').addEventListener('click', () => {
-        closeModal(popup, popupCloseCallback);
+        if (!popup.classList.contains('popup_type_image')) {
+            closeModal(popup, popupCloseCallback);
+        } else {
+            closeModal(popup);
+        }
     })
 })
 
@@ -45,10 +49,11 @@ popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (eve
         })
         .catch(err => {
             console.log(err);
+            popups.avatarPopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
+            toggleButtonState(getPopupInputElements(popups.avatarPopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Сохранить';
-            toggleButtonState(getPopupInputElements(popups.avatarPopup), buttonElement, validationSettings);
         });
 })
 
@@ -90,10 +95,11 @@ function handleProfileFormSubmit(evt) {
         })
         .catch(err => {
             console.log(err);
+            popups.profilePopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
+            toggleButtonState(getPopupInputElements(popups.profilePopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Сохранить';
-            toggleButtonState(getPopupInputElements(popups.profilePopup), buttonElement, validationSettings);
         });
 }
 
@@ -122,10 +128,11 @@ function handleCardFormSubmit(evt) {
         })
         .catch(err => {
             console.log(err);
+            popups.cardPopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
+            toggleButtonState(getPopupInputElements(popups.cardPopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Создать';
-            toggleButtonState(getPopupInputElements(popups.cardPopup), buttonElement, validationSettings);
         });
 }
 
