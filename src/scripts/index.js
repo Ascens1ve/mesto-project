@@ -30,7 +30,9 @@ const profileInfo = {
 };
 
 profileInfo.avatar.addEventListener('click', () => {
-    popups.avatarPopup.querySelector('.popup__input').value = '';
+    if (!popups.avatarPopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
+        popups.avatarPopup.querySelector('.popup__input').value = '';
+    }
     openModal(popups.avatarPopup, popupOpenCallback);
 });
 
@@ -38,9 +40,20 @@ const getPopupInputElements = (popup) => {
     return Array.from(popup.querySelectorAll('.popup__input'));
 }
 
+const toggleDisabledState = (inputList, buttonElement, settings) => {
+    inputList.forEach((inputElement) => {
+        inputElement.disabled = !inputElement.disabled;
+    });
+    buttonElement.disabled = !buttonElement.disabled;
+    buttonElement.classList.toggle(settings.inactiveButtonClass);
+    buttonElement.classList.toggle(settings.submittingButtonClass);
+};
+
 popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (event) => {
     event.preventDefault();
     const buttonElement = popups.avatarPopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.avatarPopup);
+    toggleDisabledState(inputList, buttonElement, validationSettings);
     buttonElement.textContent = 'Сохранение...';
     updateAvatar(event.currentTarget.querySelector('.popup__input').value)
         .then(data => {
@@ -49,11 +62,10 @@ popups.avatarPopup.querySelector('.popup__form').addEventListener('submit', (eve
         })
         .catch(err => {
             console.log(err);
-            popups.avatarPopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
-            toggleButtonState(getPopupInputElements(popups.avatarPopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Сохранить';
+            toggleDisabledState(inputList, buttonElement, validationSettings);
         });
 })
 
@@ -78,14 +90,18 @@ const nameInput = profileFormElement.querySelector('.popup__input_type_name');
 const jobInput = profileFormElement.querySelector('.popup__input_type_description');
 
 profileEditOpenButton.addEventListener('click', () => {
-    nameInput.value = profileInfo.title.textContent;
-    jobInput.value = profileInfo.description.textContent;
+    if (!popups.profilePopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
+        nameInput.value = profileInfo.title.textContent;
+        jobInput.value = profileInfo.description.textContent;
+    }
     openModal(popups.profilePopup, popupOpenCallback);
 });
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.profilePopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.profilePopup);
+    toggleDisabledState(inputList, buttonElement, validationSettings);
     buttonElement.textContent = 'Сохранение...';
     updateProfileInfo(nameInput.value, jobInput.value)
         .then(res => {
@@ -95,11 +111,10 @@ function handleProfileFormSubmit(evt) {
         })
         .catch(err => {
             console.log(err);
-            popups.profilePopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
-            toggleButtonState(getPopupInputElements(popups.profilePopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Сохранить';
+            toggleDisabledState(inputList, buttonElement, validationSettings);
         });
 }
 
@@ -112,14 +127,18 @@ const cardTemplateInner = document.querySelector('#card-template').content.query
 const cards = document.querySelector('.places__list');
 
 cardAddOpenButton.addEventListener('click', () => {
-    cardNameInput.value = '';
-    cardUrlInput.value = '';
+    if (!popups.cardPopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
+        cardNameInput.value = '';
+        cardUrlInput.value = '';
+    }
     openModal(popups.cardPopup, popupOpenCallback);
 });
 
 function handleCardFormSubmit(evt) {
     evt.preventDefault();
     const buttonElement = popups.cardPopup.querySelector('.popup__button');
+    const inputList = getPopupInputElements(popups.cardPopup);
+    toggleDisabledState(inputList, buttonElement, validationSettings);
     buttonElement.textContent = 'Создание...';
     postCard(cardNameInput.value, cardUrlInput.value)
         .then(res => {
@@ -128,11 +147,10 @@ function handleCardFormSubmit(evt) {
         })
         .catch(err => {
             console.log(err);
-            popups.cardPopup.querySelector('.popup__form').dataset.isSubmitting = 'false';
-            toggleButtonState(getPopupInputElements(popups.cardPopup), buttonElement, validationSettings);
         })
         .finally(() => {
             buttonElement.textContent = 'Создать';
+            toggleDisabledState(inputList, buttonElement, validationSettings);
         });
 }
 

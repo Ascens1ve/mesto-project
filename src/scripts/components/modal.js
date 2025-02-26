@@ -6,12 +6,14 @@ export const validationSettings = {
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_inactive',
     inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
+    errorClass: 'popup__input-error_active',
+    submittingButtonClass: 'popup__button_sumbit'
 };
 
 export const popupOpenCallback = (popup) => {
-    const inputList = Array.from(popup.querySelectorAll(validationSettings.inputSelector));
     const buttonElement = popup.querySelector(validationSettings.submitButtonSelector);
+    if (buttonElement.classList.contains(validationSettings.submittingButtonClass)) return;
+    const inputList = Array.from(popup.querySelectorAll(validationSettings.inputSelector));
     toggleButtonState(inputList, buttonElement, validationSettings);
 }
 
@@ -21,11 +23,6 @@ export const popupCloseCallback = (popup) => {
         if (!inputElement.validity.valid) {
             hideInputError(popup, inputElement, validationSettings);
         }
-    });
-    popup.addEventListener('transitionend', function handler() {
-        popup.querySelector('.popup__form').dataset.isSubmitting = 'false';
-        popupOpenCallback(popup);
-        popup.removeEventListener('transitionend', handler);
     });
 }
 
