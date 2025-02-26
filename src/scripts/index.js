@@ -15,7 +15,9 @@ const popups = {
 Object.values(popups).forEach((popup) => {
     popup.querySelector('.popup__close').addEventListener('click', () => {
         if (!popup.classList.contains('popup_type_image')) {
-            closeModal(popup, popupCloseCallback);
+            if (!popup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
+                closeModal(popup, popupCloseCallback);
+            }
         } else {
             closeModal(popup);
         }
@@ -30,9 +32,7 @@ const profileInfo = {
 };
 
 profileInfo.avatar.addEventListener('click', () => {
-    if (!popups.avatarPopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
-        popups.avatarPopup.querySelector('.popup__input').value = '';
-    }
+    popups.avatarPopup.querySelector('.popup__input').value = '';
     openModal(popups.avatarPopup, popupOpenCallback);
 });
 
@@ -90,10 +90,8 @@ const nameInput = profileFormElement.querySelector('.popup__input_type_name');
 const jobInput = profileFormElement.querySelector('.popup__input_type_description');
 
 profileEditOpenButton.addEventListener('click', () => {
-    if (!popups.profilePopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
-        nameInput.value = profileInfo.title.textContent;
-        jobInput.value = profileInfo.description.textContent;
-    }
+    nameInput.value = profileInfo.title.textContent;
+    jobInput.value = profileInfo.description.textContent;
     openModal(popups.profilePopup, popupOpenCallback);
 });
 
@@ -127,10 +125,8 @@ const cardTemplateInner = document.querySelector('#card-template').content.query
 const cards = document.querySelector('.places__list');
 
 cardAddOpenButton.addEventListener('click', () => {
-    if (!popups.cardPopup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) {
-        cardNameInput.value = '';
-        cardUrlInput.value = '';
-    }
+    cardNameInput.value = '';
+    cardUrlInput.value = '';
     openModal(popups.cardPopup, popupOpenCallback);
 });
 

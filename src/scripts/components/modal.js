@@ -30,6 +30,7 @@ function closeByEsc(event) {
     if (event.key === 'Escape') {
         let popup = document.querySelector('.popup_is-opened');
         if (!popup.classList.contains('popup_type_image')) {
+            if (popup.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) return;
             closeModal(popup, popupCloseCallback);
         } else {
             closeModal(popup);
@@ -40,6 +41,7 @@ function closeByEsc(event) {
 function closeByClick(event) {
     if (event.target.classList.contains('popup')) {
         if (!event.target.classList.contains('popup_type_image')) {
+            if (event.target.querySelector('.popup__button').classList.contains(validationSettings.submittingButtonClass)) return;
             closeModal(event.target, popupCloseCallback);
         } else {
             closeModal(event.target);
