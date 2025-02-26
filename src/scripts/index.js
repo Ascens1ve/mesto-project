@@ -9,7 +9,7 @@ const popups = {
     cardPopup: document.querySelector('.popup_type_new-card'),
     imagePopup: document.querySelector('.popup_type_image'),
     avatarPopup: document.querySelector('.popup_type_new-avatar')
-}
+};
 
 // Закрытие по кнопке
 Object.values(popups).forEach((popup) => {
